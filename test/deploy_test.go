@@ -11,12 +11,13 @@ func TestTerraformAwsHelloWorldExample(t *testing.T) {
 	t.Parallel()
 
 	// Create randomized name parameter for each test so we avoid clashes
-	RandomizedName := fmt.Sprintf("test-case-%x", xid.New().String()[0:8])
+	RandomizedName := fmt.Sprintf("test-case-%s", xid.New().String()[0:8])
 
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../examples/full",
 		Vars: map[string]interface{} {
 				"name": RandomizedName,
+				"root_domain": fmt.Sprintf("%s.viljami.io", RandomizedName),
 		},
 	}
 
