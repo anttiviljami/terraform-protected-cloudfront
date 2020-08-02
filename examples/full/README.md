@@ -13,7 +13,7 @@ You can use the aws-cli to generate a certificate for your domains. Please note
 that the certificate needs to be validated before use.
 
 ```
-aws acm request-certificate --domain-name mydomain.com --subject-alternative-names a.example.com b.example.com *.c.example.com
+aws acm request-certificate --domain-name mydomain.com --subject-alternative-names a.mydomain.com b.mydomain.com
 ```
 
 ## Demo App
