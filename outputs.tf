@@ -18,7 +18,7 @@ output "static_bucket" {
   description = "Name of S3 bucket serving /static"
 }
 
-output "s3_bucket_arn" {
+output "static_bucket_arn" {
   value       = aws_s3_bucket.static_bucket.arn
   description = "ARN of S3 bucket serving /static"
 }

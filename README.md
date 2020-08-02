@@ -6,10 +6,12 @@
 Terraform module to create a [CloudFront distribution](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-overview.html)
 with HTTPS and IP protection adhering to AWS best practices.
 
+This module creates:
+
 - [Cloudfront Distribution](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-overview.html)
-  - Configurable default origin
-  - Creates private S3 bucket to serve content under /static
-  - HTTPS with existing ACM Certificate
+  - Fully configurable default origin
+  - TLS with existing ACM Certificate
+- Private [S3 bucket](https://docs.aws.amazon.com/AmazonS3/latest/dev/Introduction.html) served under `/static`
 - [WAF Web ACL](https://docs.aws.amazon.com/waf/latest/developerguide/web-acl.html for IP protection
 - [Route53 HostedZone](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-working-with.html) + ALIAS records for configured domains
 
@@ -54,7 +56,6 @@ See [`outputs.tf`](./outputs.tf)
 ## Requirements
 
 - [Terraform](https://www.terraform.io/downloads.html) (>0.12.0)
-- AWS Provider (>3.0.0)
 
 ## Tests
 

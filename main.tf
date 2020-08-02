@@ -90,7 +90,6 @@ resource "aws_cloudfront_distribution" "main" {
 ##
 # Private Origin S3 Bucket for /static
 ##
-
 resource "aws_s3_bucket" "static_bucket" {
   bucket = "${var.name}-static"
   tags   = var.tags
@@ -155,7 +154,6 @@ resource "aws_s3_bucket_policy" "static_bucket" {
 ##
 # Route53 Hosted Zone 
 ##
-
 resource "aws_route53_zone" "main" {
   count = var.root_domain != "" ? 1 : 0
   name  = var.root_domain
