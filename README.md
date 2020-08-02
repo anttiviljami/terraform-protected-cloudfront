@@ -1,6 +1,7 @@
 # terraform-protected-cloudfront
 
-![License](https://img.shields.io/github/license/anttiviljami/terraform-protected-cloudfront)
+[![License](https://img.shields.io/github/license/anttiviljami/terraform-protected-cloudfront)](https://github.com/anttiviljami/terraform-protected-cloudfront/blob/master/LICENSE)
+[![CI](https://github.com/anttiviljami/terraform-protected-cloudfront/workflows/CI/badge.svg)](https://github.com/anttiviljami/terraform-protected-cloudfront/actions?query=workflow%3ACI)
 
 Terraform module to create a [CloudFront distribution](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-overview.html)
 with HTTPS and IP protection adhering to AWS best practices.
