@@ -13,11 +13,16 @@ func TestTerraformAwsHelloWorldExample(t *testing.T) {
 	// Create randomized name parameter for each test so we avoid clashes
 	RandomizedName := fmt.Sprintf("test-case-%s", xid.New().String()[0:8])
 
+	// Use wildcard ACM Certificate
+	ACMCertificateARN := "arn:aws:acm:us-east-1:921809084865:certificate/2387a941-4dde-4ba3-8709-f456ed223d26"
+
 	terraformOptions := &terraform.Options{
 		TerraformDir: "../examples/full",
 		Vars: map[string]interface{} {
 				"name": RandomizedName,
 				"root_domain": fmt.Sprintf("%s.viljami.io", RandomizedName),
+				"subdomains": []string{},
+				"acm_certificate_arn": ACMCertificateARN,
 		},
 	}
 
