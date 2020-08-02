@@ -28,9 +28,8 @@ module "protected_cloudfront" {
 - ACM Certificate ARN for HTTPS
 - Domain Name(s) associated with certificate
 - Allowed IP ranges (default: 0.0.0.0/0, ::/0)
+- Default CloudFront Origin (default: External demo app)
 - Root path to serve static S3 content (default: /static)
-- Default CloudFront Behaviour (default: Static S3 Origin)
-- Additional CloudFront Origins (optional)
 - Basic Auth Configuration (optional)
 - Tags (optional)
 

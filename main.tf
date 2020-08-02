@@ -10,6 +10,20 @@ resource "aws_cloudfront_distribution" "main" {
   aliases = var.aliases
 
   origin {
+    origin_id   = "default"
+    domain_name = var.default_origin.domain_name
+    origin_path = lookup(var.default_origin, "origin_path", "")
+    custom_origin_config {
+      http_port                = lookup(var.default_origin.custom_origin_config, "http_port", 80)
+      https_port               = lookup(var.default_origin.custom_origin_config, "https_port", 443)
+      origin_protocol_policy   = lookup(var.default_origin.custom_origin_config, "origin_protocol_policy", "https-only")
+      origin_ssl_protocols     = lookup(var.default_origin.custom_origin_config, "origin_ssl_protocols", ["TLSv1.2"])
+      origin_keepalive_timeout = lookup(var.default_origin.custom_origin_config, "origin_keepalive_timeout", 60)
+      origin_read_timeout      = lookup(var.default_origin.custom_origin_config, "origin_read_timeout", 60)
+    }
+  }
+
+  origin {
     origin_id   = "static"
     domain_name = aws_s3_bucket.static_bucket.bucket_regional_domain_name
     s3_origin_config {
@@ -18,8 +32,27 @@ resource "aws_cloudfront_distribution" "main" {
   }
 
   default_cache_behavior {
-    target_origin_id       = "static" #TODO
-    allowed_methods        = ["GET", "HEAD"]
+    target_origin_id       = "default"
+    viewer_protocol_policy = "redirect-to-https"
+    allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods         = ["GET", "HEAD", "OPTIONS"]
+    forwarded_values {
+      query_string = true
+      cookies {
+        forward = "all"
+      }
+      headers = var.forwarded_headers
+    }
+    min_ttl     = 0
+    max_ttl     = 86400
+    default_ttl = 3600
+    compress    = true
+  }
+
+  ordered_cache_behavior {
+    path_pattern           = "/static/*"
+    target_origin_id       = "static"
+    allowed_methods        = ["GET", "HEAD", "OPTIONS"]
     cached_methods         = ["GET", "HEAD"]
     viewer_protocol_policy = "redirect-to-https"
     forwarded_values {
@@ -27,6 +60,7 @@ resource "aws_cloudfront_distribution" "main" {
         forward = "none"
       }
       query_string = false
+      headers      = []
     }
     min_ttl     = 0
     max_ttl     = 86400
