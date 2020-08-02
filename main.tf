@@ -97,11 +97,34 @@ resource "aws_s3_bucket" "access_logs" {
   bucket = "${var.name}-cloudfront-access-logs"
   tags   = var.tags
   acl    = "private"
+  lifecycle {
+    ignore_changes = [grant]
+  }
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
         sse_algorithm = "AES256"
       }
+    }
+  }
+  lifecycle_rule {
+    id      = "log"
+    enabled = true
+    prefix  = ""
+    tags = {
+      "rule"      = "log"
+      "autoclean" = "true"
+    }
+    transition {
+      days          = 30
+      storage_class = "STANDARD_IA"
+    }
+    transition {
+      days          = 60
+      storage_class = "GLACIER"
+    }
+    expiration {
+      days = 90
     }
   }
 }
@@ -119,6 +142,9 @@ resource "aws_s3_bucket" "static_bucket" {
         sse_algorithm = "AES256"
       }
     }
+  }
+  versioning {
+    enabled = true
   }
 }
 

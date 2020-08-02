@@ -58,8 +58,8 @@ variable "default_origin" {
 }
 
 variable "minimum_tls_version" {
-  type    = "string"
-  default = "TLSv1.1"
+  type    = string
+  default = "TLSv1.1_2016"
 }
 
 variable "forwarded_headers" {
