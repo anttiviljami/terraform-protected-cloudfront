@@ -1,3 +1,6 @@
+##
+# CloudFront Distribution
+##
 resource "aws_cloudfront_distribution" "main" {
   comment = var.name
   tags    = var.tags
@@ -84,6 +87,10 @@ resource "aws_cloudfront_distribution" "main" {
   web_acl_id = length(local.allowlist_ip) > 0 ? aws_waf_web_acl.ip_allowlist.0.id : null
 }
 
+##
+# Private Origin S3 Bucket for /static
+##
+
 resource "aws_s3_bucket" "static_bucket" {
   bucket = "${var.name}-static"
   tags   = var.tags
@@ -145,6 +152,10 @@ resource "aws_s3_bucket_policy" "static_bucket" {
   policy = data.aws_iam_policy_document.static_bucket.json
 }
 
+##
+# Route53 Hosted Zone 
+##
+
 resource "aws_route53_zone" "main" {
   count = var.root_domain != "" ? 1 : 0
   name  = var.root_domain
@@ -163,7 +174,8 @@ resource "aws_route53_record" "cloudfront-ipv4" {
   }
 }
 
-# Route53 Alias with both IPv4 and IPv6 doesn't seem to work for whatever reason
+# @FIXME: Route53 Alias with both IPv4 and IPv6 doesn't seem to work for whatever reason
+
 # resource "aws_route53_record" "cloudfront-ipv6" {
 #   count   = length(local.aliases)
 #   zone_id = aws_route53_zone.main[0].zone_id
@@ -176,7 +188,11 @@ resource "aws_route53_record" "cloudfront-ipv4" {
 #   }
 # }
 
-# WAFv2 resources for CloudFront can currently only be created in us-east-1
+##
+# AWS WAF Web ACL IP Protection
+#
+# Note: The new WAFv2 resources for CloudFront can currently only be created in us-east-1
+##
 resource "aws_waf_ipset" "ip_allowlist" {
   count = length(local.allowlist_ip) > 0 ? 1 : 0
 
