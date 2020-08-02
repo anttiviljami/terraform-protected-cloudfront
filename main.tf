@@ -8,7 +8,7 @@ resource "aws_cloudfront_distribution" "main" {
   enabled         = true
   is_ipv6_enabled = true
 
-  price_class = "PriceClass_100"
+  price_class = var.price_class
 
   aliases = var.root_domain != "" ? local.aliases : []
 
@@ -98,6 +98,8 @@ resource "aws_s3_bucket" "access_logs" {
   tags   = var.tags
   acl    = "private"
   lifecycle {
+    # ignore changes made to ACL by CloudFront
+    # https://github.com/terraform-providers/terraform-provider-aws/issues/10158
     ignore_changes = [grant]
   }
   server_side_encryption_configuration {

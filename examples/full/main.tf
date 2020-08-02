@@ -20,11 +20,13 @@ module "protected_cloudfront" {
       https_port               = 443
       origin_read_timeout      = 60
       origin_keepalive_timeout = 10
-      origin_ssl_protocols     = ["TLSv1", "TLSv1.1", "TLSv1.2"]
+      origin_ssl_protocols     = ["TLSv1.2"]
       origin_protocol_policy   = "http-only"
+      # WARNING: Traffic should be secured between cloudfront and origins
+      # S3 website hosting is always unsecured HTTP 
     }
   }
-  forwarded_headers = ["Authorization"]
+  forwarded_headers = ["Authorization", "Referrer"]
 
   tags = {
     Service = "My Protected Application"

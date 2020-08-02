@@ -42,7 +42,7 @@ variable "default_origin" {
     })
   })
 
-  # Demo SPA app hosted on S3
+  # Dummy app hosted on S3 website hosting
   default = {
     domain_name = "protected-cloudfront-demo-app.s3-website-eu-west-1.amazonaws.com"
     origin_path = ""
@@ -52,20 +52,11 @@ variable "default_origin" {
       origin_read_timeout      = 60
       origin_keepalive_timeout = 10
       origin_ssl_protocols     = ["TLSv1.2"]
-      origin_protocol_policy   = "http-only" # unencrypted traffic for demo only
+      origin_protocol_policy   = "http-only"
+      # WARNING: Traffic should be secured between cloudfront and origins
+      # S3 website hosting is always unsecured HTTP
     }
   }
-}
-
-variable "minimum_tls_version" {
-  type    = string
-  default = "TLSv1.1_2016"
-}
-
-variable "forwarded_headers" {
-  description = "Headers to forward to default origin"
-  type        = list(string)
-  default     = []
 }
 
 variable "allowlist_ipv4" {
@@ -78,4 +69,20 @@ variable "allowlist_ipv6" {
   description = "IPv6 CIDR ranges allowed to access the distribution"
   type        = list(string)
   default     = []
+}
+
+variable "minimum_tls_version" {
+  type    = string
+  default = "TLSv1.1_2016"
+}
+
+variable "forwarded_headers" {
+  description = "Headers to forward to default origin"
+  type        = list(string)
+  default     = ["Authorization", "Referrer"]
+}
+
+variable "price_class" {
+  type    = string
+  default = "PriceClass_100"
 }
