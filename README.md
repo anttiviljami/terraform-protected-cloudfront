@@ -49,6 +49,8 @@ module "protected_cloudfront" {
 }
 ```
 
+See full example under [`examples/full`](./examples/full)
+
 ## Outputs
 
 See [`outputs.tf`](./outputs.tf)

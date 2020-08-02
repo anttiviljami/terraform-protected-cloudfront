@@ -23,6 +23,8 @@ func TestTerraformAwsHelloWorldExample(t *testing.T) {
 				"root_domain": fmt.Sprintf("%s.viljami.io", RandomizedName),
 				"subdomains": []string{},
 				"acm_certificate_arn": ACMCertificateARN,
+				"allowlist_ipv4": []string{ "10.0.0.0/8" },
+				"allowlist_ipv6": []string{ "2001:0db8:0000:0000:0000:0000:0000:0000/64" },
 		},
 	}
 
