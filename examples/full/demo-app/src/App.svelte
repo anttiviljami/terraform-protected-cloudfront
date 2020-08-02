@@ -1,7 +1,3 @@
-<script>
-  export let name;
-</script>
-
 <style>
   main {
     text-align: center;

@@ -20,7 +20,7 @@ This module creates:
 
 ```hcl
 module "protected_cloudfront" {
-  source "git::https://github.com/anttiviljami/terraform-protected-cloudfront.git?ref=1.0.0"
+  source "git::https://github.com/anttiviljami/terraform-protected-cloudfront.git?ref=tags/1.1.0"
 
   name                = "my-protected-app"
   root_domain         = "terraform.viljami.io"
