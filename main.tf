@@ -81,7 +81,7 @@ resource "aws_cloudfront_distribution" "main" {
     minimum_protocol_version       = "TLSv1"
   }
 
-  web_acl_id = aws_waf_web_acl.ip_allowlist.id
+  web_acl_id = length(local.allowlist_ip) > 0 ? aws_waf_web_acl.ip_allowlist.0.id : null
 }
 
 resource "aws_s3_bucket" "static_bucket" {
@@ -178,6 +178,8 @@ resource "aws_route53_record" "cloudfront-ipv4" {
 
 # WAFv2 resources for CloudFront can currently only be created in us-east-1
 resource "aws_waf_ipset" "ip_allowlist" {
+  count = length(local.allowlist_ip) > 0 ? 1 : 0
+
   name = "${var.name}-ip-whitelist"
   dynamic "ip_set_descriptors" {
     for_each = var.allowlist_ipv4
@@ -196,21 +198,25 @@ resource "aws_waf_ipset" "ip_allowlist" {
 }
 
 resource "aws_waf_rule" "ip_allowlist" {
+  count = length(local.allowlist_ip) > 0 ? 1 : 0
+
   name        = "${var.name}-ip-whitelist"
   metric_name = "WafRule${sha256(var.name)}"
   predicates {
     type    = "IPMatch"
-    data_id = aws_waf_ipset.ip_allowlist.id
+    data_id = aws_waf_ipset.ip_allowlist.0.id
     negated = false
   }
 }
 
 resource "aws_waf_web_acl" "ip_allowlist" {
+  count = length(local.allowlist_ip) > 0 ? 1 : 0
+
   name        = "${var.name}-ip-whitelist-acl"
   metric_name = "ACL${sha256(var.name)}"
 
   rules {
-    rule_id = aws_waf_rule.ip_allowlist.id
+    rule_id = aws_waf_rule.ip_allowlist.0.id
     action {
       type = "ALLOW"
     }
