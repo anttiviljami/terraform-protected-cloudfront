@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/anttiviljami/terraform-protected-cloudfront/workflows/CI/badge.svg)](https://github.com/anttiviljami/terraform-protected-cloudfront/actions?query=workflow%3ACI)
 [![License](https://img.shields.io/badge/license-Apache-blue)](https://github.com/anttiviljami/terraform-protected-cloudfront/blob/master/LICENSE)
+![Version](https://img.shields.io/github/v/tag/anttiviljami/terraform-protected-cloudfront)
 
 Terraform module to create a [CloudFront distribution](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-overview.html)
 with HTTPS and IP protection adhering to AWS best practices.
@@ -19,19 +20,18 @@ This module creates:
 
 ```hcl
 module "protected_cloudfront" {
-  source "git::https://github.com/anttiviljami/terraform-protected-cloudfront.git?ref=master"
+  source "git::https://github.com/anttiviljami/terraform-protected-cloudfront.git?ref=1.0.0"
 
-  name                = var.name
+  name                = "my-protected-app"
   root_domain         = "terraform.viljami.io"
   subdomains          = ["a.terraform.viljami.io", "b.terraform.viljami.io"]
   acm_certificate_arn = "arn:aws:acm:us-east-1:921809084865:certificate/d453c7e7-b9e4-430b-a380-113cffd924e3"
 
-  allowlist_ipv4      = ["10.0.0.0/16", "8.0.0.0/8"]
-  allowlist_ipv6      = ["2001:db8::/64"]
-  forwarded_headers   = ["Authorization"]
+  allowlist_ipv4 = ["10.0.0.0/16", "8.0.0.0/8"]
+  allowlist_ipv6 = ["2001:db8::/64"]
 
   default_origin = {
-    domain_name = "protected-cloudfront-demo-app.s3-website-eu-west-1.amazonaws.com"
+    domain_name = "my-protected-app.viljami.io"
     origin_path = ""
     custom_origin_config = {
       http_port                = 80
@@ -39,9 +39,10 @@ module "protected_cloudfront" {
       origin_read_timeout      = 60
       origin_keepalive_timeout = 10
       origin_ssl_protocols     = ["TLSv1", "TLSv1.1", "TLSv1.2"]
-      origin_protocol_policy   = "http-only"
+      origin_protocol_policy   = "https-only"
     }
   }
+  forwarded_headers = ["Authorization", "Referrer"]
 
   tags = {
     Service = "My Protected Application"
