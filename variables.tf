@@ -62,3 +62,15 @@ variable "forwarded_headers" {
   type        = list(string)
   default     = []
 }
+
+variable "allowlist_ipv4" {
+  description = "IPv4 CIDR ranges allowed to access the distribution"
+  type        = list(string)
+  default     = []
+}
+
+variable "allowlist_ipv6" {
+  description = "IPv6 CIDR ranges allowed to access the distribution"
+  type        = list(string)
+  default     = []
+}

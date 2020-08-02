@@ -80,6 +80,8 @@ resource "aws_cloudfront_distribution" "main" {
     cloudfront_default_certificate = var.acm_certificate_arn == "" ? true : false
     minimum_protocol_version       = "TLSv1"
   }
+
+  web_acl_id = aws_waf_web_acl.ip_allowlist.id
 }
 
 resource "aws_s3_bucket" "static_bucket" {
@@ -173,3 +175,50 @@ resource "aws_route53_record" "cloudfront-ipv4" {
 #     evaluate_target_health = false
 #   }
 # }
+
+# WAFv2 resources for CloudFront can currently only be created in us-east-1
+resource "aws_waf_ipset" "ip_allowlist" {
+  name = "${var.name}-ip-whitelist"
+  dynamic "ip_set_descriptors" {
+    for_each = var.allowlist_ipv4
+    content {
+      type  = "IPV4"
+      value = ip_set_descriptors.value
+    }
+  }
+  dynamic "ip_set_descriptors" {
+    for_each = var.allowlist_ipv6
+    content {
+      type  = "IPV6"
+      value = ip_set_descriptors.value
+    }
+  }
+}
+
+resource "aws_waf_rule" "ip_allowlist" {
+  name        = "${var.name}-ip-whitelist"
+  metric_name = "WafRule${sha256(var.name)}"
+  predicates {
+    type    = "IPMatch"
+    data_id = aws_waf_ipset.ip_allowlist.id
+    negated = false
+  }
+}
+
+resource "aws_waf_web_acl" "ip_allowlist" {
+  name        = "${var.name}-ip-whitelist-acl"
+  metric_name = "ACL${sha256(var.name)}"
+
+  rules {
+    rule_id = aws_waf_rule.ip_allowlist.id
+    action {
+      type = "ALLOW"
+    }
+    priority = 1
+    type     = "REGULAR"
+  }
+
+  default_action {
+    type = "BLOCK"
+  }
+}
