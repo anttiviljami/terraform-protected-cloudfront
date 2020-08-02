@@ -192,6 +192,7 @@ resource "aws_route53_record" "cloudfront-ipv4" {
 # AWS WAF Web ACL IP Protection
 #
 # Note: The new WAFv2 resources for CloudFront can currently only be created in us-east-1
+# TODO: Move to another module with us-east-1 provider
 ##
 resource "aws_waf_ipset" "ip_allowlist" {
   count = length(local.allowlist_ip) > 0 ? 1 : 0
@@ -244,3 +245,6 @@ resource "aws_waf_web_acl" "ip_allowlist" {
     type = "BLOCK"
   }
 }
+
+# TODO: Add Basic Auth module
+# https://github.com/builtinnya/aws-lambda-edge-basic-auth-terraform

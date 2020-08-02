@@ -10,9 +10,8 @@ with HTTPS and IP protection adhering to AWS best practices.
   - Configurable default origin
   - Creates private S3 bucket to serve content under /static
   - HTTPS with existing ACM Certificate
-- [WAF Web ACL](https://docs.aws.amazon.com/waf/latest/developerguide/web-acl.html)
-  - IP Whitelist (IPv4 + IPv6)
-- [Route53 HostedZone](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-working-with.html)
+- [WAF Web ACL](https://docs.aws.amazon.com/waf/latest/developerguide/web-acl.html for IP protection
+- [Route53 HostedZone](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-working-with.html) + ALIAS records for configured domains
 
 ## Usage
 
@@ -25,7 +24,7 @@ module "protected_cloudfront" {
   subdomains          = ["a.terraform.viljami.io", "b.terraform.viljami.io"]
   acm_certificate_arn = "arn:aws:acm:us-east-1:921809084865:certificate/d453c7e7-b9e4-430b-a380-113cffd924e3"
 
-  allowlist_ipv4      = ["10.0.0.0/8"]
+  allowlist_ipv4      = ["10.0.0.0/16", "8.0.0.0/8"]
   allowlist_ipv6      = ["2001:db8::/64"]
   forwarded_headers   = ["Authorization"]
 

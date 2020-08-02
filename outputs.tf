@@ -15,10 +15,10 @@ output "distribution_domain_name" {
 
 output "static_bucket" {
   value       = aws_s3_bucket.static_bucket.id
-  description = "Name of S3 bucket"
+  description = "Name of S3 bucket serving /static"
 }
 
 output "s3_bucket_arn" {
   value       = aws_s3_bucket.static_bucket.arn
-  description = "ARN of S3 bucket"
+  description = "ARN of S3 bucket serving /static"
 }
