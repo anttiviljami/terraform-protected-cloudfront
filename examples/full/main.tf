@@ -3,6 +3,8 @@ provider "aws" {
 }
 
 module "protected_cloudfront" {
-  source                   = "../../"
+  source = "../../"
+
+  name = "protected-cf-example-full"
 }
 

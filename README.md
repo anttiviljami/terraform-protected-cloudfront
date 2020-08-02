@@ -25,7 +25,7 @@ module "protected_cloudfront" {
 
 ## Inputs
 
-- ACM Certificate ARN for TLS
+- ACM Certificate ARN for HTTPS
 - Domain Name(s) associated with certificate
 - Allowed IP ranges (default: 0.0.0.0/0, ::/0)
 - Root path to serve static S3 content (default: /static)
@@ -39,6 +39,7 @@ module "protected_cloudfront" {
 - Distribution ARN
 - Distribution ID
 - Distribution Domain Name
+- Static S3 Bucket Name
 - Static S3 Bucket ARN
 
 ## Tests
@@ -48,4 +49,3 @@ This Terraform module is tested using [Terratest](https://terratest.gruntwork.io
 ```sh
 cd test && go test
 ```
-
