@@ -7,7 +7,7 @@ resource "aws_cloudfront_distribution" "main" {
 
   price_class = "PriceClass_100"
 
-  aliases = var.aliases
+  aliases = var.root_domain != "" ? local.aliases : []
 
   origin {
     origin_id   = "default"
@@ -142,3 +142,34 @@ resource "aws_s3_bucket_policy" "static_bucket" {
   bucket = aws_s3_bucket.static_bucket.id
   policy = data.aws_iam_policy_document.static_bucket.json
 }
+
+resource "aws_route53_zone" "main" {
+  count = var.root_domain != "" ? 1 : 0
+  name  = var.root_domain
+  tags  = var.tags
+}
+
+resource "aws_route53_record" "cloudfront-ipv4" {
+  count   = length(local.aliases)
+  zone_id = aws_route53_zone.main[0].zone_id
+  name    = local.aliases[count.index]
+  type    = "A"
+  alias {
+    name                   = aws_cloudfront_distribution.main.domain_name
+    zone_id                = aws_cloudfront_distribution.main.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+
+# Route53 Alias with both IPv4 and IPv6 doesn't seem to work for whatever reason
+# resource "aws_route53_record" "cloudfront-ipv6" {
+#   count   = length(local.aliases)
+#   zone_id = aws_route53_zone.main[0].zone_id
+#   name    = local.aliases[count.index]
+#   type    = "AAAA"
+#   alias {
+#     name                   = aws_cloudfront_distribution.main.domain_name
+#     zone_id                = aws_cloudfront_distribution.main.hosted_zone_id
+#     evaluate_target_health = false
+#   }
+# }

@@ -15,9 +15,15 @@ variable "acm_certificate_arn" {
   default     = ""
 }
 
-variable "aliases" {
+variable "root_domain" {
+  type        = string
+  description = "Root domain for Route53 Hosted Zone in FQDN format"
+  default     = ""
+}
+
+variable "subdomains" {
   type        = list(string)
-  description = "Domain Name(s) associated with certificate"
+  description = "Subdomains associated with ACM certificate in FQDN format"
   default     = []
 }
 
@@ -35,7 +41,8 @@ variable "default_origin" {
       origin_read_timeout      = number
     })
   })
-  # For demo purposes only
+
+  # Demo SPA app hosted on S3
   default = {
     domain_name = "protected-cloudfront-demo-app.s3-website-eu-west-1.amazonaws.com"
     origin_path = ""
