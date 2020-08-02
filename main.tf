@@ -85,6 +85,25 @@ resource "aws_cloudfront_distribution" "main" {
   }
 
   web_acl_id = length(local.allowlist_ip) > 0 ? aws_waf_web_acl.ip_allowlist.0.id : null
+
+  logging_config {
+    include_cookies = false
+    bucket          = aws_s3_bucket.access_logs.bucket_domain_name
+    prefix          = ""
+  }
+}
+
+resource "aws_s3_bucket" "access_logs" {
+  bucket = "${var.name}-cloudfront-access-logs"
+  tags   = var.tags
+  acl    = "private"
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
+  }
 }
 
 ##
