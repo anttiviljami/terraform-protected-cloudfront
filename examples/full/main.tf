@@ -5,6 +5,6 @@ provider "aws" {
 module "protected_cloudfront" {
   source = "../../"
 
-  name = "protected-cf-example-full"
+  name = var.name
 }
 
