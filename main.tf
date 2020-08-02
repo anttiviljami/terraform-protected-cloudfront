@@ -15,14 +15,14 @@ resource "aws_cloudfront_distribution" "main" {
   origin {
     origin_id   = "default"
     domain_name = var.default_origin.domain_name
-    origin_path = lookup(var.default_origin, "origin_path", "")
+    origin_path = var.default_origin.origin_path
     custom_origin_config {
-      http_port                = lookup(var.default_origin.custom_origin_config, "http_port", 80)
-      https_port               = lookup(var.default_origin.custom_origin_config, "https_port", 443)
-      origin_protocol_policy   = lookup(var.default_origin.custom_origin_config, "origin_protocol_policy", "https-only")
-      origin_ssl_protocols     = lookup(var.default_origin.custom_origin_config, "origin_ssl_protocols", ["TLSv1.2"])
-      origin_keepalive_timeout = lookup(var.default_origin.custom_origin_config, "origin_keepalive_timeout", 60)
-      origin_read_timeout      = lookup(var.default_origin.custom_origin_config, "origin_read_timeout", 60)
+      http_port                = var.default_origin.custom_origin_config.http_port
+      https_port               = var.default_origin.custom_origin_config.https_port
+      origin_protocol_policy   = var.default_origin.custom_origin_config.origin_protocol_policy
+      origin_ssl_protocols     = var.default_origin.custom_origin_config.origin_ssl_protocols
+      origin_keepalive_timeout = var.default_origin.custom_origin_config.origin_keepalive_timeout
+      origin_read_timeout      = var.default_origin.custom_origin_config.origin_read_timeout
     }
   }
 
