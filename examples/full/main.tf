@@ -21,12 +21,13 @@ module "protected_cloudfront" {
       origin_read_timeout      = 60
       origin_keepalive_timeout = 10
       origin_ssl_protocols     = ["TLSv1", "TLSv1.1", "TLSv1.2"]
-      origin_protocol_policy   = "http-only" 
+      origin_protocol_policy   = "http-only"
     }
   }
   forwarded_headers = ["Authorization"]
 
   tags = {
-    Author = "viljami.io"
+    Service = "My Protected Application"
+    Author  = "viljami.io"
   }
 }

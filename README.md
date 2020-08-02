@@ -12,7 +12,7 @@ This module creates:
   - Fully configurable default origin
   - TLS with existing ACM Certificate
 - Private [S3 bucket](https://docs.aws.amazon.com/AmazonS3/latest/dev/Introduction.html) served under `/static`
-- [WAF Web ACL](https://docs.aws.amazon.com/waf/latest/developerguide/web-acl.html for IP protection
+- [WAF Web ACL](https://docs.aws.amazon.com/waf/latest/developerguide/web-acl.html) for IP protection
 - [Route53 HostedZone](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/hosted-zones-working-with.html) + ALIAS records for configured domains
 
 ## Usage
