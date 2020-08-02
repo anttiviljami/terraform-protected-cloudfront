@@ -81,7 +81,7 @@ resource "aws_cloudfront_distribution" "main" {
     acm_certificate_arn            = var.acm_certificate_arn
     ssl_support_method             = var.acm_certificate_arn == "" ? "" : "sni-only"
     cloudfront_default_certificate = var.acm_certificate_arn == "" ? true : false
-    minimum_protocol_version       = "TLSv1"
+    minimum_protocol_version       = var.minimum_tls_version
   }
 
   web_acl_id = length(local.allowlist_ip) > 0 ? aws_waf_web_acl.ip_allowlist.0.id : null

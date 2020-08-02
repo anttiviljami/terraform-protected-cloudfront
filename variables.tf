@@ -51,10 +51,15 @@ variable "default_origin" {
       https_port               = 443
       origin_read_timeout      = 60
       origin_keepalive_timeout = 10
-      origin_ssl_protocols     = ["TLSv1", "TLSv1.1", "TLSv1.2"]
-      origin_protocol_policy   = "http-only"
+      origin_ssl_protocols     = ["TLSv1.2"]
+      origin_protocol_policy   = "http-only" # unencrypted traffic for demo only
     }
   }
+}
+
+variable "minimum_tls_version" {
+  type    = "string"
+  default = "TLSv1.1"
 }
 
 variable "forwarded_headers" {
