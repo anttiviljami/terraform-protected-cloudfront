@@ -72,8 +72,9 @@ variable "allowlist_ipv6" {
 }
 
 variable "minimum_tls_version" {
-  type    = string
-  default = "TLSv1.1_2016"
+  description = "The minimum TLS version supported for viewers"
+  type        = string
+  default     = "TLSv1.1_2016"
 }
 
 variable "forwarded_headers" {
@@ -83,6 +84,13 @@ variable "forwarded_headers" {
 }
 
 variable "price_class" {
-  type    = string
-  default = "PriceClass_100"
+  description = "The price class of the CloudFront distribution"
+  type        = string
+  default     = "PriceClass_100"
+}
+
+variable "static_path" {
+  description = "The root path of the static endpoint"
+  type        = string
+  default     = "/static"
 }

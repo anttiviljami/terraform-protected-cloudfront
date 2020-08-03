@@ -43,6 +43,7 @@ module "protected_cloudfront" {
     }
   }
   forwarded_headers = ["Authorization", "Referrer"]
+  static_path       = "/static"
 
   tags = {
     Service = "My Protected Application"

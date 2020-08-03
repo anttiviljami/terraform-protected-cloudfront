@@ -53,7 +53,7 @@ resource "aws_cloudfront_distribution" "main" {
   }
 
   ordered_cache_behavior {
-    path_pattern           = "/static/*"
+    path_pattern           = "${var.static_path}*"
     target_origin_id       = "static"
     allowed_methods        = ["GET", "HEAD", "OPTIONS"]
     cached_methods         = ["GET", "HEAD"]
